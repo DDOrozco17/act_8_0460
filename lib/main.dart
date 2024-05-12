@@ -1,42 +1,137 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-  // This widget is the root of your application.
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // Application name
-      title: 'Flutter Hello World',
-      // Application theme data, you can set the colors for the application as
-      // you want
-      theme: ThemeData(
-        // useMaterial3: false,
-        primarySwatch: Colors.blue,
-      ),
-      // A widget which will be started on application startup
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(useMaterial3: true),
+      home: const TabBarExample(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final String title;
-  const MyHomePage({super.key, required this.title});  
+class TabBarExample extends StatefulWidget {
+  const TabBarExample({Key? key}) : super(key: key);
+
+  @override
+  State<TabBarExample> createState() => _TabBarExampleState();
+}
+
+class _TabBarExampleState extends State<TabBarExample>
+    with TickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // The title text which will be shown on the action bar
-        title: Text(title),
-      ),
-      body: Center(
-        child: Text(
-          'Hello, World!',
+        backgroundColor: Colors.green, // Cambié el color a verde
+        title: const Text(
+          'Papeleria Diaz 0460',
+          style: TextStyle(color: Colors.white),
         ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const <Widget>[
+            Tab(
+              icon: Icon(
+                Icons.create,
+                color: Colors.white,
+              ),
+            ),
+            Tab(
+              icon: Icon(
+                Icons.bookmark,
+                color: Colors.white,
+              ),
+            ),
+            Tab(
+              icon: Icon(
+                Icons.auto_fix_high,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          Center(
+            child: Image.asset(
+              "assets/images/marcadorhome.png",
+              width: 400,
+              height: 300,
+              fit: BoxFit.contain,
+              frameBuilder: (context, child, frame, loaded) {
+                if (loaded) {
+                  return child;
+                }
+                return AnimatedOpacity(
+                  opacity: frame == null ? 0 : 1,
+                  duration: const Duration(seconds: 1),
+                  curve: Curves.easeOut,
+                  child: child,
+                );
+              },
+            ),
+          ),
+          Center(
+            child: Image.asset(
+              "assets/images/marcatextoshome.png",
+              width: 400,
+              height: 300,
+              fit: BoxFit.contain,
+              frameBuilder: (context, child, frame, loaded) {
+                if (loaded) {
+                  return child;
+                }
+                return AnimatedOpacity(
+                  opacity: frame == null ? 0 : 1,
+                  duration: const Duration(seconds: 2),
+                  curve: Curves.easeOut,
+                  child: child,
+                );
+              },
+            ),
+          ),
+          Center(
+            child: Image.asset(
+              "assets/images/pegamento.png",
+              width: 400,
+              height: 300,
+              fit: BoxFit.contain,
+              frameBuilder: (context, child, frame, loaded) {
+                if (loaded) {
+                  return child;
+                }
+                return AnimatedOpacity(
+                  opacity: frame == null ? 0 : 1,
+                  duration: const Duration(seconds: 1),
+                  curve: Curves.easeOut,
+                  child: child,
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
